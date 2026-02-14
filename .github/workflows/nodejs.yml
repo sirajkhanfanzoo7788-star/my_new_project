@@ -37,21 +37,22 @@ jobs:
           docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-            - name: Deploy to EKS
+      # 5️⃣ Deploy to EKS
+      - name: Deploy to EKS
         run: |
-          # 1️⃣ Update kubeconfig and ensure IAM auth works
+          # Update kubeconfig and ensure IAM auth works
           aws eks update-kubeconfig \
             --region us-east-1 \
             --name New-EKS-Cluster-cluster \
             --alias github-actions
 
-          # 2️⃣ Debug cluster connection
+          # Debug cluster connection
           kubectl config current-context
           kubectl get nodes || echo "Failed to get nodes, check cluster name and IAM permissions"
 
-          # 3️⃣ Apply deployment & service
+          # Apply deployment & service
           kubectl apply -f deployment.yaml --validate=false
           kubectl apply -f service.yaml --validate=false
 
-          # 4️⃣ Wait for rollout
+          # Wait for rollout
           kubectl rollout status deployment/my-new-project-deployment
