@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my_new_project-deployment
+  name: my-new-project-deployment   # Use hyphens instead of underscores
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: my_new_project
+      app: my-new-project
   template:
     metadata:
       labels:
-        app: my_new_project
+        app: my-new-project
     spec:
       containers:
-        - name: my_new_project
+        - name: my-new-project
           image: 228948463033.dkr.ecr.us-east-1.amazonaws.com/newone:latest
           ports:
             - containerPort: 5000
