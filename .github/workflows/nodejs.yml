@@ -1,4 +1,4 @@
-name: Build, Push & Deploy to EKS
+name: Build, Push & Auto-Deploy to EKS
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
           docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      # 5️⃣ Deploy to EKS
+      # 5️⃣ Deploy to EKS and force pods to use latest image
       - name: Deploy to EKS
         run: |
           # Update kubeconfig for GitHub runner
@@ -47,9 +47,13 @@ jobs:
           kubectl config current-context
           kubectl get nodes
 
-          # Apply deployment & service
+          # Apply deployment & service (in case YAML changed)
           kubectl apply -f deployment.yaml --validate=false
           kubectl apply -f service.yaml --validate=false
+
+          # Force update deployment to pull latest image
+          kubectl set image deployment/my-new-project-deployment \
+            my-new-project=228948463033.dkr.ecr.us-east-1.amazonaws.com/newone:latest
 
           # Wait for rollout
           kubectl rollout status deployment/my-new-project-deployment
