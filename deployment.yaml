@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-new-project-deployment   # Use hyphens instead of underscores
+  name: my-new-project-deployment   # deployment name
 spec:
-  replicas: 2
+  replicas: 2                        # number of pods
   selector:
     matchLabels:
       app: my-new-project

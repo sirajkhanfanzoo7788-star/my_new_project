@@ -5,8 +5,7 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: my-new-project
+    app: my-new-project            # must match deployment labels
   ports:
-    - protocol: TCP
-      port: 80          # Public port
-      targetPort: 5000  # Container port
+    - port: 80                     # public port
+      targetPort: 5000             # container port
