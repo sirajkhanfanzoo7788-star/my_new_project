@@ -16,4 +16,4 @@ spec:
         - name: my-new-project
           image: 228948463033.dkr.ecr.us-east-1.amazonaws.com/newone:latest
           ports:
-            - containerPort: 5000
+            - containerPort: 3000

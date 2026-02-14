@@ -8,4 +8,4 @@ spec:
     app: my-new-project            # must match deployment labels
   ports:
     - port: 80                     # public port
-      targetPort: 5000             # container port
+      targetPort: 3000             # container port
