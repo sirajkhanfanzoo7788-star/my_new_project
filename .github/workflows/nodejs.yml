@@ -26,8 +26,8 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 4️⃣ Build, Tag & Push Docker image
-      - name: Build, Tag & Push
+      # 4️⃣ Build, tag, and push Docker image
+      - name: Build, Tag & Push Docker image
         env:
           ECR_REGISTRY: 228948463033.dkr.ecr.us-east-1.amazonaws.com
           ECR_REPOSITORY: newone
@@ -40,7 +40,16 @@ jobs:
       # 5️⃣ Deploy to EKS
       - name: Deploy to EKS
         run: |
+          # Update kubeconfig
           aws eks update-kubeconfig --region us-east-1 --name New-EKS-Cluster-cluster
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
+
+          # Debug: check cluster access
+          kubectl config current-context
+          kubectl get nodes
+
+          # Apply deployment and service
+          kubectl apply -f deployment.yaml --validate=false
+          kubectl apply -f service.yaml --validate=false
+
+          # Wait for deployment rollout
           kubectl rollout status deployment/my-new-project-deployment
